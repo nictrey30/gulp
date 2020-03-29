@@ -51,10 +51,10 @@ gulp.task('sass', async () => {
     .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('scripts', async () => {
-  gulp
+gulp.task('scripts', function() {
+  return gulp
     .src('src/js/*.js')
-    .pipe(gulp.concat('main.js'))
+    .pipe(concat('main.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/js'));
 });
@@ -63,3 +63,10 @@ gulp.task(
   'default',
   gulp.parallel(['message', 'copyHtml', 'imagemin', 'sass', 'scripts'])
 );
+
+gulp.task('watch', function() {
+  gulp.watch('src/js/*.js', gulp.series('scripts'));
+  gulp.watch('src/images/*', gulp.series('imagemin'));
+  gulp.watch('src/sass/*.scss', gulp.series('sass'));
+  gulp.watch('src/*.html', gulp.series('copyHtml'));
+});
